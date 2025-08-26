@@ -1,0 +1,106 @@
+################################################
+##			A: IAM・認可・認証					##
+################################################
+chmod +x A01_iam_user_report_markdown.sh
+./A01_iam_user_report_markdown.sh | pbcopy
+
+chmod +x A02_iam_user_group_policy_report_markdown.sh
+./A02_iam_user_group_policy_report_markdown.sh | pbcopy
+
+chmod +x A03_iam_role_report_markdown.sh
+./A03_iam_role_report_markdown.sh | pbcopy
+
+chmod +x A04_iam_policy_report_markdown.sh
+./A04_iam_policy_report_markdown.sh | pbcopy
+
+chmod +x A06_access_key_usage_report_markdown.sh
+./A06_access_key_usage_report_markdown.sh | pbcopy
+
+chmod +x A05_mfa_device_report_markdown.sh
+./A05_mfa_device_report_markdown.sh | pbcopy
+
+chmod +x A06_access_key_usage_report_markdown.sh
+./A06_access_key_usage_report_markdown.sh | pbcopy
+
+################################################
+##		B: ログ・可観測性・監査証跡	 			  ##
+################################################
+chmod +x B01_cloudtrail_report_markdown.sh
+./B01_cloudtrail_report_markdown.sh | pbcopy
+
+chmod +x B02_config_status_report_markdown.sh
+./B02_config_status_report_markdown.sh | pbcopy
+
+chmod +x B03_cloudwatch_alarm_report_markdown.sh
+./B03_cloudwatch_alarm_report_markdown.sh | pbcopy
+
+chmod +x B04_guardduty_finding_report_markdown.sh
+./B04_guardduty_finding_report_markdown.sh | pbcopy
+
+chmod +x B05_inspector_report.sh
+./B05_inspector_report.sh | pbcopy
+
+################################################
+##		C: インフラ構成			 			    ##
+################################################
+chmod +x C01_ec2_instance_report_markdown.sh
+./C01_ec2_instance_report_markdown.sh | pbcopy
+
+chmod +x C02_lambda_report_markdown.sh
+./C02_lambda_report_markdown.sh | pbcopy
+
+chmod +x C03_ecs_service_report_markdown.sh
+./C03_ecs_service_report_markdown.sh | pbcopy
+
+chmod +x C04_vpc_report_markdown.sh
+./C04_vpc_report_markdown.sh | pbcopy
+
+chmod +x C05_security_group_report_markdown.sh
+./C05_security_group_report_markdown.sh | pbcopy
+
+chmod +x C06_rds_report_markdown.sh
+./C06_rds_report_markdown.sh | pbcopy
+
+chmod +x C07_elb_report_markdown.sh
+./C07_elb_report_markdown.sh | pbcopy
+
+chmod +x C08_autoscaling_group_report.sh
+./C08_autoscaling_group_report.sh | pbcopy
+
+chmod +x C09_tagging_report_markdown.sh
+./C09_tagging_report_markdown.sh | pbcopy
+
+################################################
+##		D: ストレージ / データ管理 			     ##
+################################################
+chmod +x D01_s3_bucket_report_markdown.sh
+./D01_s3_bucket_report_markdown.sh | pbcopy
+
+chmod +x D02_s3_encryption_blockpublic_report.sh
+./D02_s3_encryption_blockpublic_report.sh | pbcopy
+
+
+chmod +x D03_ssm_parameter_report_markdown.sh
+./D03_ssm_parameter_report_markdown.sh | pbcopy
+
+
+chmod +x D04_secrets_ssm_report_markdown.sh
+./D04_secrets_ssm_report_markdown.sh | pbcopy
+
+################################################
+##		E: CI/CD・メッセージング 			    ##
+################################################
+chmod +x E01_ses_report_markdown.sh
+./E01_ses_report_markdown.sh | pbcopy
+
+chmod +x E02_codepipeline_report.sh
+./E02_codepipeline_report.sh | pbcopy
+
+chmod +x E03_codebuild_report.sh
+./E03_codebuild_report.sh | pbcopy
+
+chmod +x E04_sns_topic_report.sh
+./E04_sns_topic_report.sh | pbcopy
+
+chmod +x E05_eventbridge_rule_report.sh
+./E05_eventbridge_rule_report.sh | pbcopy

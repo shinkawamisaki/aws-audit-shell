@@ -2,7 +2,7 @@
 
 このリポジトリは、AWSアカウントのセキュリティ監査・構成確認を **Markdown形式で Notion に貼り付け可能な形** で出力するシェルスクリプト集です。
 
-📦 スクリプト配布元: [shinkawamisaki/aws-audit-shell-scripts](https://github.com/shinkawamisaki/aws-audit-shell-scripts)
+📦 スクリプト配布元: [shinkawamisaki/aws-audit-shell](https://github.com/shinkawamisaki/aws-audit-shell)
 
 ---
 

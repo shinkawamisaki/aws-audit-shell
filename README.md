@@ -26,45 +26,44 @@ chmod +x A01_iam_user_report_markdown.sh
 
 ## スクリプト一覧（カテゴリ別）
 
-### A: IAM・認可・認証
-- A01_iam_user_report_markdown.sh
-- A02_iam_user_group_policy_report_markdown.sh
-- A03_iam_role_report_markdown.sh
-- A04_iam_policy_report_markdown.sh
-- A05_mfa_device_report_markdown.sh
-- A06_access_key_usage_report_markdown.sh
+### 🔐 A: IAM・認可・認証
+- IAMユーザー一覧
+- IAMユーザーグループ & ポリシー
+- IAMロール一覧（信頼ポリシー含む）
+- IAMカスタムポリシー一覧
+- MFAデバイス設定状況
+- アクセスキー最終使用日
 
-### B: ログ・可観測性・監査証跡
-- B01_cloudtrail_report_markdown.sh
-- B02_config_status_report_markdown.sh
-- B03_cloudwatch_alarm_report_markdown.sh
-- B04_guardduty_finding_report_markdown.sh
-- B05_inspector_report.sh
+### 🔎 B: ログ・可観測性・監査証跡
+- CloudTrail設定
+- AWS Config有効状況
+- CloudWatchアラーム一覧
+- GuardDuty検出結果
+- Inspector Findings
 
-### C: インフラ構成
-- C01_ec2_instance_report_markdown.sh
-- C02_lambda_report_markdown.sh
-- C03_ecs_service_report_markdown.sh
-- C04_vpc_report_markdown.sh
-- C05_security_group_report_markdown.sh
-- C06_rds_report_markdown.sh
-- C07_elb_report_markdown.sh
-- C08_autoscaling_group_report.sh
-- C09_tagging_report_markdown.sh
+### ☁️ C: インフラ構成
+- EC2インスタンス一覧
+- Lambda関数一覧
+- ECSサービス/タスク定義
+- VPC / Subnet / IGW / NATGW
+- Security Groupルール一覧
+- RDSインスタンス一覧
+- LoadBalancer構成（ALB/ELB）
+- AutoScaling Group設定
+- タグ付きリソース一覧 
 
-### D: ストレージ / データ管理
-- D01_s3_bucket_report_markdown.sh
-- D02_s3_encryption_blockpublic_report.sh
-- D03_ssm_parameter_report_markdown.sh
-- D04_secrets_ssm_report_markdown.sh
+### 💾 D: ストレージ / データ管理
+- S3バケット一覧
+- S3暗号化 / 公開ブロック設定
+- SSMパラメータ一覧
+- Secrets Manager / SSM Secrets一覧
 
-### E: CI/CD・メッセージング
-- E01_ses_report_markdown.sh
-- E02_codepipeline_report.sh
-- E03_codebuild_report.sh
-- E04_sns_topic_report.sh
-- E05_eventbridge_rule_report.sh
-
+### 📦 E: CI/CD・メッセージング
+- SES設定
+- CodePipeline構成
+- CodeBuild履歴・定義
+- SNSトピック通知設定
+- EventBridgeルール一覧
 ---
 
 ## ライセンス

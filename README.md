@@ -66,6 +66,11 @@ chmod +x A01_iam_user_report_markdown.sh
 - EventBridgeルール一覧
 ---
 
-## ライセンス
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-MIT License
+---
+
+⚠️ Note  
+This software was created and released by the author as a **personal open-source project**.  
+It is **not a deliverable or commissioned work** for any client or employer.

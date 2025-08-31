@@ -1,43 +1,45 @@
 #!/bin/bash
-# D03_ssm_parameter_report_markdown.sh
+# D03_ssm_parameter_report_markdown.sh（値は取得しない版）
+set -euo pipefail
+export AWS_PAGER=""
 
-REGION="ap-northeast-1"
+REGION="${1:-${AWS_REGION:-ap-northeast-1}}"; export AWS_REGION="$REGION"
 
-# ヘッダー出力（Markdown）
+# Markdownヘッダー（元と同じ列構成：最後に「備考」を残す）
 echo "| 名前 | タイプ | 最終変更日 | KMS暗号化キー | タグ | 機密の可能性 | 備考 |"
-echo "|------|--------|-------------|----------------|------|----------------|------|"
+echo "|------|--------|------------|----------------|------|----------------|------|"
 
-# パラメータ一覧取得
-PARAM_NAMES=$(aws ssm describe-parameters --region "$REGION" \
-  --query 'Parameters[*].Name' --output text)
-
-for NAME in $PARAM_NAMES; do
-  PARAM=$(aws ssm describe-parameters --region "$REGION" \
-    --parameter-filters "Key=Name,Values=$NAME" \
-    --query 'Parameters[0]' --output json)
-
-  TYPE=$(echo "$PARAM" | jq -r '.Type')
-  LASTMOD=$(echo "$PARAM" | jq -r '.LastModifiedDate')
-  KMS=$(echo "$PARAM" | jq -r '.KeyId // "default (aws/ssm)"')
-
-  TAGS=$(aws ssm list-tags-for-resource --resource-type "Parameter" \
-    --resource-id "$NAME" --region "$REGION" \
-    | jq -r '[.Tags[]? | "\(.Key)=\(.Value)"] | join(", ")')
-
-  # 値取得（セキュアでも中身は取得しない。チェック用）
-  VALUE=$(aws ssm get-parameter --name "$NAME" \
-    --with-decryption --region "$REGION" 2>/dev/null \
-    | jq -r '.Parameter.Value' || echo "")
-
-  # 機密っぽい文字列含むかを判定
-  if echo "$VALUE" | grep -qiE 'secret|token|key|AKIA|password'; then
-    SECRET="⚠️"
+NEXT=""
+while : ; do
+  if [ -n "$NEXT" ]; then
+    PAGE="$(aws ssm describe-parameters --region "$REGION" --max-items 50 --starting-token "$NEXT" --output json)"
   else
-    SECRET=""
+    PAGE="$(aws ssm describe-parameters --region "$REGION" --max-items 50 --output json)"
   fi
 
-  echo "| $NAME | $TYPE | $LASTMOD | $KMS | $TAGS | $SECRET | |"
-      # 実行ログに追記（進捗表更新用）
-  echo "$(date +%F) | D03 実行完了" >> evidence_execution_log.md
+  echo "$PAGE" | jq -r '.Parameters[]? | [.Name,.Type, (.LastModifiedDate//""), (.KeyId//"")] | @tsv' \
+  | while IFS=$'\t' read -r NAME TYPE LMOD KEYID; do
+      # SecureString のとき KMS列を埋める（KeyIdが空なら既定alias表記）
+      KMS="$([ "$TYPE" = "SecureString" ] && echo "${KEYID:-alias/aws/ssm}" || echo "-")"
 
+      # タグ文字列化
+      TAGS="$(aws ssm list-tags-for-resource --region "$REGION" --resource-type Parameter --resource-id "$NAME" --output json \
+             | jq -r '[.Tags[]? | "\(.Key)=\(.Value)"] | join(", ")')"
+
+      # 機密フラグ：SecureStringは🔒、名前にsecret等を含めば⚠️
+      SECRET_FLAG=""
+      if [ "$TYPE" = "SecureString" ]; then
+        SECRET_FLAG="🔒"
+      elif echo "$NAME" | grep -qiE '(secret|token|password|api[_-]?key|private[_-]?key)'; then
+        SECRET_FLAG="⚠️"
+      fi
+
+      echo "| $NAME | $TYPE | ${LMOD:-} | $KMS | ${TAGS:-} | $SECRET_FLAG | |"
+    done
+
+  NEXT="$(echo "$PAGE" | jq -r '.NextToken // empty')"
+  [ -z "$NEXT" ] && break
 done
+
+# 実行ログ（1回だけ）
+echo "$(date +%F) | D03 実行完了 ($REGION)" >> evidence_execution_log.md

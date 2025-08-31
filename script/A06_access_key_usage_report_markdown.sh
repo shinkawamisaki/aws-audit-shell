@@ -6,28 +6,23 @@ echo "| ユーザー名 | アクセスキーID | 作成日 | 最終使用日 | �
 echo "|------------|------------------|--------|--------------|------------|------|"
 
 # IAMユーザー一覧取得
-USERNAMES=$(aws iam list-users --query 'Users[*].UserName' --output text)
-
-for USERNAME in $USERNAMES; do
-  # アクセスキー取得
-  ACCESS_KEYS=$(aws iam list-access-keys --user-name "$USERNAME" --query 'AccessKeyMetadata[*]' --output json)
-
-  echo "$ACCESS_KEYS" | jq -c '.[]' | while read -r KEY; do
-    ACCESS_KEY_ID=$(echo "$KEY" | jq -r '.AccessKeyId')
-    CREATED=$(echo "$KEY" | jq -r '.CreateDate')
-    STATUS=$(echo "$KEY" | jq -r '.Status')
-
-    # 最終使用日の取得（なければ N/A）
-    LAST_USED=$(aws iam get-access-key-last-used --access-key-id "$ACCESS_KEY_ID" \
-      --query 'AccessKeyLastUsed.LastUsedDate' --output text 2>/dev/null)
-
-    if [[ "$LAST_USED" == "None" || -z "$LAST_USED" ]]; then
-      LAST_USED="N/A"
-    fi
-
-    echo "| $USERNAME | $ACCESS_KEY_ID | $CREATED | $LAST_USED | $STATUS | |"
-  done
+mask_key() { sed -E 's/(AKIA|ASIA)([A-Z0-9]{12})([A-Z0-9]{4})/\1********\3/g'; }
+aws iam list-users --output json \
+| jq -r '.Users[]?.UserName' \
+| while IFS= read -r USER; do
+  aws iam list-access-keys --user-name "$USER" --output json \
+  | jq -r '.AccessKeyMetadata[]? | [.AccessKeyId,.CreateDate,.Status] | @tsv' \
+  | while IFS=$'\t' read -r AK CD ST; do
+      [ -z "$AK" ] && continue
+      J="$(aws iam get-access-key-last-used --access-key-id "$AK" --output json 2>/dev/null || echo '{}')"
+      LU="$(echo "$J" | jq -r '.AccessKeyLastUsed.LastUsedDate // "N/A"')"
+      SV="$(echo "$J" | jq -r '.AccessKeyLastUsed.ServiceName // ""')"
+      RG="$(echo "$J" | jq -r '.AccessKeyLastUsed.Region // ""')"
+      NOTE=""
+      [ "$LU" = "N/A" ] && NOTE="未使用"
+      MASKED="$(printf "%s" "$AK" | mask_key)"
+      echo "| $USER | $MASKED | $CD | $LU | $SV | $RG | $ST | $NOTE |"
+    done
 done
-
 # 実行ログ追記
 echo "$(date +%F) | A06 実行完了" >> evidence_execution_log.md

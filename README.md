@@ -67,10 +67,18 @@ chmod +x A01_iam_user_report_markdown.sh
 ---
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
 
 ---
 
 ⚠️ Note  
 This software was created and released by the author as a **personal open-source project**.  
 It is **not a deliverable or commissioned work** for any client or employer.
+
+✅ Corporate/commercial use allowed  
+You are free to use, modify, and integrate this software **within your company or for client work** under the terms of the MIT License. **No additional permission is required.**  
+If you redistribute, please retain the copyright notice and the LICENSE file.
+
+✅ 会社内・商用での利用について  
+本ソフトウェアは **MIT ライセンスの範囲で、社内利用・商用利用・受託案件への組み込みも自由**に行えます。**追加の許諾は不要**です。  
+再配布する場合は、著作権表示と LICENSE ファイルを残してください。
